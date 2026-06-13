@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-const links = [
+const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/blog', label: 'Blog' },
@@ -14,7 +14,7 @@ const links = [
 
 export default function Navbar() {
   const pathname = usePathname()
-  const [open, setOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
@@ -22,46 +22,55 @@ export default function Navbar() {
         <Link href="/" className="text-navy font-bold text-lg tracking-tight">
           Nam Nguyen
         </Link>
-        {/* Desktop */}
+
+        {/* Desktop nav */}
         <div className="hidden md:flex gap-6">
-          {links.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className={`text-sm font-medium transition-colors ${
-                pathname === href
-                  ? 'text-navy border-b-2 border-navy pb-0.5'
-                  : 'text-gray-600 hover:text-navy'
-              }`}
-            >
-              {label}
-            </Link>
-          ))}
+          {navLinks.map(({ href, label }) => {
+            const isActive = pathname === href
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'text-navy font-bold border-b-2 border-navy pb-0.5'
+                    : 'text-gray-600 hover:text-navy'
+                }`}
+              >
+                {label}
+              </Link>
+            )
+          })}
         </div>
-        {/* Hamburger */}
+
+        {/* Mobile hamburger */}
         <button
-          className="md:hidden text-gray-700"
-          onClick={() => setOpen(!open)}
+          className="md:hidden text-gray-600 hover:text-navy"
+          onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
-          {open ? '✕' : '☰'}
+          {menuOpen ? '✕' : '☰'}
         </button>
       </div>
+
       {/* Mobile menu */}
-      {open && (
-        <div className="md:hidden bg-white border-t border-gray-200 px-4 py-2 flex flex-col gap-2">
-          {links.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setOpen(false)}
-              className={`text-sm font-medium py-1 ${
-                pathname === href ? 'text-navy font-bold' : 'text-gray-600'
-              }`}
-            >
-              {label}
-            </Link>
-          ))}
+      {menuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-100 px-4 py-3 flex flex-col gap-3">
+          {navLinks.map(({ href, label }) => {
+            const isActive = pathname === href
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                className={`text-sm font-medium ${
+                  isActive ? 'text-navy font-bold' : 'text-gray-600 hover:text-navy'
+                }`}
+              >
+                {label}
+              </Link>
+            )
+          })}
         </div>
       )}
     </nav>

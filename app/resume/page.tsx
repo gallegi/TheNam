@@ -4,9 +4,9 @@ const experience = [
     company: 'SomeCompany',
     period: '2024 – Present',
     bullets: [
-      'Designed and deployed a real-time recommendation system serving 2M+ daily active users with p99 latency under 50ms.',
-      'Reduced model retraining costs by 40% by introducing incremental fine-tuning and feature caching in the MLOps pipeline.',
-      'Led migration of legacy batch inference jobs to streaming architecture using Kafka and Python consumers.',
+      'Designed and deployed a Vietnamese NLP system processing 500K+ documents per day with 94% accuracy.',
+      'Reduced model inference latency by 40% through quantization and batching optimizations.',
+      'Established MLOps practices including experiment tracking, model versioning, and automated retraining pipelines.',
     ],
   },
   {
@@ -14,9 +14,9 @@ const experience = [
     company: 'AnotherCo',
     period: '2022 – 2024',
     bullets: [
-      'Built Vietnamese NLP models for sentiment classification and named entity recognition, integrated into the customer support platform.',
-      'Established A/B testing framework that reduced experiment cycle time from two weeks to three days.',
-      'Mentored two junior data scientists and introduced code review practices for the ML team.',
+      'Built end-to-end recommendation system serving 1M+ active users, improving CTR by 18%.',
+      'Automated data quality monitoring pipeline, reducing data incidents by 60%.',
+      'Collaborated with product teams to translate business requirements into ML problem formulations.',
     ],
   },
 ]
@@ -24,7 +24,7 @@ const experience = [
 const education = [
   {
     degree: 'B.S. Computer Science',
-    school: 'University of Science, HCMC',
+    institution: 'University of Science, Ho Chi Minh City',
     period: '2018 – 2022',
   },
 ]
@@ -36,37 +36,38 @@ const skills = [
   { category: 'Tools', items: ['Docker', 'Git', 'PostgreSQL', 'AWS'] },
 ]
 
-export default function ResumePage() {
+export default function Resume() {
   return (
-    <div className="max-w-3xl mx-auto px-4 py-16">
-      <div className="flex items-center justify-between mb-10 flex-wrap gap-4">
+    <div className="max-w-4xl mx-auto px-4 py-16">
+      <div className="flex items-center justify-between mb-10">
         <h1 className="text-3xl font-bold text-navy">Resume</h1>
         <a
           href="/resume.pdf"
-          className="px-4 py-2 bg-navy text-white text-sm font-medium rounded hover:bg-opacity-90 transition"
+          className="px-4 py-2 bg-navy text-white rounded text-sm font-medium hover:bg-opacity-90 transition-opacity"
         >
-          ⬇ Download PDF
+          Download PDF
         </a>
       </div>
 
       {/* Experience */}
-      <section className="mb-10">
-        <h2 className="text-xl font-bold text-navy mb-4 border-b border-gray-200 pb-2">
-          Experience
-        </h2>
-        <div className="flex flex-col gap-6">
-          {experience.map((job) => (
-            <div key={job.company}>
-              <div className="flex items-baseline justify-between flex-wrap gap-1 mb-1">
-                <span className="font-semibold text-gray-900">
-                  {job.role}{' '}
-                  <span className="text-slate-custom">@ {job.company}</span>
-                </span>
-                <span className="text-sm text-slate-custom">{job.period}</span>
+      <section className="mb-12">
+        <h2 className="text-xl font-bold text-navy mb-6 border-b border-gray-200 pb-2">Experience</h2>
+        <div className="space-y-8">
+          {experience.map(({ role, company, period, bullets }) => (
+            <div key={`${role}-${company}`}>
+              <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+                <div>
+                  <span className="font-semibold text-gray-900">{role}</span>
+                  <span className="text-slate-custom"> @ {company}</span>
+                </div>
+                <span className="text-sm text-slate-custom">{period}</span>
               </div>
-              <ul className="list-disc list-inside text-gray-700 text-sm space-y-1">
-                {job.bullets.map((b, i) => (
-                  <li key={i}>{b}</li>
+              <ul className="space-y-1.5">
+                {bullets.map((bullet, i) => (
+                  <li key={i} className="text-sm text-gray-700 flex gap-2">
+                    <span className="text-navy mt-0.5">&#8211;</span>
+                    <span>{bullet}</span>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -75,42 +76,29 @@ export default function ResumePage() {
       </section>
 
       {/* Education */}
-      <section className="mb-10">
-        <h2 className="text-xl font-bold text-navy mb-4 border-b border-gray-200 pb-2">
-          Education
-        </h2>
-        {education.map((edu) => (
-          <div key={edu.school} className="flex items-baseline justify-between flex-wrap gap-1">
-            <span className="font-semibold text-gray-900">
-              {edu.degree}{' '}
-              <span className="text-slate-custom">— {edu.school}</span>
-            </span>
-            <span className="text-sm text-slate-custom">{edu.period}</span>
-          </div>
-        ))}
+      <section className="mb-12">
+        <h2 className="text-xl font-bold text-navy mb-6 border-b border-gray-200 pb-2">Education</h2>
+        <div className="space-y-4">
+          {education.map(({ degree, institution, period }) => (
+            <div key={degree} className="flex flex-wrap items-baseline justify-between gap-2">
+              <div>
+                <span className="font-semibold text-gray-900">{degree}</span>
+                <span className="text-slate-custom">, {institution}</span>
+              </div>
+              <span className="text-sm text-slate-custom">{period}</span>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Skills */}
       <section>
-        <h2 className="text-xl font-bold text-navy mb-4 border-b border-gray-200 pb-2">
-          Skills
-        </h2>
+        <h2 className="text-xl font-bold text-navy mb-6 border-b border-gray-200 pb-2">Skills</h2>
         <div className="grid sm:grid-cols-2 gap-4">
           {skills.map(({ category, items }) => (
-            <div key={category}>
-              <h3 className="text-xs font-semibold text-slate-custom uppercase tracking-wide mb-1">
-                {category}
-              </h3>
-              <div className="flex flex-wrap gap-1">
-                {items.map((item) => (
-                  <span
-                    key={item}
-                    className="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
+            <div key={category} className="flex gap-3">
+              <span className="text-sm font-semibold text-slate-custom w-24 shrink-0">{category}</span>
+              <span className="text-sm text-gray-700">{items.join(', ')}</span>
             </div>
           ))}
         </div>

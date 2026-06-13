@@ -1,48 +1,59 @@
 export default function About() {
   const skills = [
-    { category: 'Languages', items: ['Python', 'TypeScript', 'SQL', 'Bash'] },
-    { category: 'ML / AI', items: ['PyTorch', 'TensorFlow', 'scikit-learn', 'HuggingFace'] },
-    { category: 'Web', items: ['Next.js', 'FastAPI', 'React'] },
-    { category: 'Tools', items: ['Docker', 'Git', 'PostgreSQL', 'AWS'] },
+    {
+      category: 'Languages',
+      items: ['Python', 'TypeScript', 'SQL', 'Bash'],
+    },
+    {
+      category: 'ML / AI',
+      items: ['PyTorch', 'TensorFlow', 'scikit-learn', 'HuggingFace'],
+    },
+    {
+      category: 'Web',
+      items: ['Next.js', 'FastAPI', 'React'],
+    },
+    {
+      category: 'Tools',
+      items: ['Docker', 'Git', 'PostgreSQL', 'AWS'],
+    },
   ]
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="text-3xl font-bold text-navy mb-6">About Me</h1>
+      <h1 className="text-3xl font-bold text-navy mb-8">About Me</h1>
 
-      <section className="mb-10 prose prose-gray max-w-none">
+      {/* Bio */}
+      <section className="mb-12 prose prose-gray max-w-none">
         <p className="text-gray-700 leading-relaxed mb-4">
-          I&apos;m Nam Nguyen, a Machine Learning Engineer and Tech Writer based in Ho Chi Minh City,
-          Vietnam. I specialize in building end-to-end ML systems — from data ingestion and model
-          training to deployment and monitoring in production environments.
+          I&apos;m Nam Nguyen, a Machine Learning Engineer based in Vietnam. I graduated with a B.S. in Computer Science
+          from the University of Science, Ho Chi Minh City, and have since worked on building and deploying ML systems
+          at scale — from NLP pipelines for Vietnamese language processing to computer vision systems for real-world applications.
         </p>
         <p className="text-gray-700 leading-relaxed mb-4">
-          My background is in computer science with a focus on natural language processing and deep
-          learning. I enjoy working at the intersection of research and engineering, turning
-          state-of-the-art models into reliable, scalable services. I&apos;ve worked on sentiment
-          analysis, recommendation systems, and MLOps infrastructure at several companies.
+          My engineering work focuses on the full ML lifecycle: data collection and preprocessing, model training and evaluation,
+          and production deployment with monitoring. I care deeply about reproducibility and treat MLOps as a first-class concern
+          in every project I undertake.
         </p>
-        <p className="text-gray-700 leading-relaxed">
-          Beyond code, I write about AI/ML on this blog — covering practical tutorials, paper
-          summaries, and engineering lessons learned the hard way. I believe knowledge-sharing is
-          what moves the field forward.
+        <p className="text-gray-700 leading-relaxed mb-4">
+          Beyond engineering, I write about machine learning, software architecture, and the craft of technical communication.
+          I believe that writing is thinking — and that sharing knowledge openly accelerates progress for everyone in the field.
         </p>
       </section>
 
       {/* Skills */}
-      <section className="mb-10">
-        <h2 className="text-xl font-bold text-navy mb-4">Skills</h2>
-        <div className="grid sm:grid-cols-2 gap-4">
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-navy mb-6">Skills</h2>
+        <div className="grid sm:grid-cols-2 gap-6">
           {skills.map(({ category, items }) => (
-            <div key={category} className="border border-gray-200 rounded-lg p-4">
-              <h3 className="text-sm font-semibold text-slate-custom uppercase tracking-wide mb-2">
+            <div key={category}>
+              <h3 className="text-sm font-semibold text-slate-custom uppercase tracking-wider mb-3">
                 {category}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {items.map((item) => (
                   <span
                     key={item}
-                    className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm"
                   >
                     {item}
                   </span>
@@ -53,13 +64,14 @@ export default function About() {
         </div>
       </section>
 
-      {/* Interests */}
+      {/* Personal interests */}
       <section>
-        <h2 className="text-xl font-bold text-navy mb-3">Interests</h2>
+        <h2 className="text-2xl font-bold text-navy mb-4">Personal Interests</h2>
         <p className="text-gray-700 leading-relaxed">
-          Outside of work I enjoy reading research papers, contributing to open-source projects,
-          and exploring the mountains of Vietnam on a motorbike. I&apos;m also an avid reader of
-          technical blogs and enjoy experimenting with new frameworks and languages.
+          When I&apos;m not writing code or blog posts, I enjoy reading about cognitive science, linguistics, and the history
+          of mathematics. I&apos;m a strong believer in the intersection of good writing and good engineering — clear
+          communication is as important as clean code. I also enjoy contributing to open-source projects and mentoring
+          early-career engineers in the Vietnamese tech community.
         </p>
       </section>
     </div>
