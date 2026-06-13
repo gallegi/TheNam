@@ -1,0 +1,104 @@
+---
+title: "Building Robust ML Pipelines with Python and Docker"
+date: "2026-03-15"
+tags: ["machine-learning", "docker", "python", "mlops"]
+---
+
+# Building Robust ML Pipelines with Python and Docker
+
+One of the most common failure modes I've seen in ML projects is the "it works on my machine" problem. A model trains perfectly in a notebook, but when you try to run it in staging — different Python version, missing system library, subtle environment difference — everything breaks.
+
+The fix is to treat your ML code like production software from day one. That means reproducible environments, clear interfaces, and containerization with Docker.
+
+## The structure I use
+
+Here's the directory layout I've settled on after several projects:
+
+```
+my-ml-project/
+├── data/               # raw and processed data (gitignored)
+├── notebooks/          # exploration only, never imported
+├── src/
+│   ├── data.py         # data loading and preprocessing
+│   ├── model.py        # model definition
+│   ├── train.py        # training entrypoint
+│   └── evaluate.py     # evaluation logic
+├── tests/
+├── Dockerfile
+├── requirements.txt
+└── Makefile
+```
+
+The key rule: **notebooks are for exploration, `src/` is for production**. Nothing in `src/` should import from `notebooks/`.
+
+## A minimal Dockerfile for ML
+
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system deps first (better layer caching)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY src/ ./src/
+
+ENTRYPOINT ["python", "src/train.py"]
+```
+
+Pin every dependency in `requirements.txt` — use `pip freeze > requirements.txt` after testing in a clean environment. Unpinned dependencies are a time bomb.
+
+## Makefile for developer sanity
+
+```makefile
+.PHONY: build train evaluate
+
+build:
+	docker build -t my-model:latest .
+
+train:
+	docker run --rm -v $(PWD)/data:/app/data my-model:latest \
+	  --epochs 10 --lr 1e-4
+
+evaluate:
+	docker run --rm -v $(PWD)/data:/app/data my-model:latest \
+	  python src/evaluate.py
+```
+
+A `Makefile` means any engineer on the team can run `make train` without reading a README first.
+
+## Experiment tracking
+
+Don't `print()` your metrics. Use MLflow (or Weights & Biases) from the start:
+
+```python
+import mlflow
+
+with mlflow.start_run():
+    mlflow.log_param("learning_rate", lr)
+    mlflow.log_param("epochs", epochs)
+
+    for epoch in range(epochs):
+        loss = train_one_epoch(model, loader, optimizer)
+        mlflow.log_metric("train_loss", loss, step=epoch)
+
+    mlflow.pytorch.log_model(model, "model")
+```
+
+When your experiment runs in Docker with MLflow tracking to a remote server, you get full reproducibility: same code + same data + same container = same results, logged permanently.
+
+## The payoff
+
+This setup takes maybe an extra hour to set up on a new project. In return, you get:
+
+- No environment debugging when onboarding teammates
+- Clean CI/CD: just `docker build && docker run` in your pipeline
+- Every experiment logged and reproducible
+- Easy deployment: the training container and the serving container share the same base
+
+Start this way on your next project. Future you will be grateful.
