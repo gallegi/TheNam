@@ -1,7 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #1e3a5f;
+  --color-slate-custom: #64748b;
+  --font-sans: 'Inter', sans-serif;
+}
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans);
 }
